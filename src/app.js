@@ -29,6 +29,23 @@ app.use(express.static(join(__dirname, 'public')));
 
 // Iniciamos el servidor
 app.listen(PORT);
-console.log('Escuchando en el puerto ' + PORT);
+console.log('Escuchando en el puerto ' + PORT + '.....¡Bienvenido a mi página web!.....');
+
+app.use(express.urlencoded({ extended: true }));
+
+app.post('/registro', (req, res) => {
+  const { nameUser, lname, email, phone, password, job } = req.body;
+
+  const sql = 'INSERT INTO users (nameUser, lname, email, phone, password, job) VALUES (?, ?, ?, ?, ?, ?)';
+  connection.query(sql, [nameUser, lname, email, phone, password, job], (error, result) => {
+    if (error) {
+      console.error('Error al insertar usuario en la base de datos:', error);
+      res.status(500).send('Error al procesar el registro.');
+      return;
+    }
+    console.log('Usuario registrado con éxito en la base de datos');
+    res.send('¡Registro exitoso!');
+  });
+});
 
 
